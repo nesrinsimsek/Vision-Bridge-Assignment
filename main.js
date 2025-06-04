@@ -19,16 +19,20 @@ function applyActions(actions) {
                 break;
 
             case "replace":
-                document.querySelectorAll(action.selector).forEach(el => {
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = action.newElement;
+                const selectors = Array.isArray(action.selector) ? action.selector : [action.selector];
+               
+                selectors.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(el => {
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = action.newElement;
 
-                    const fragment = document.createDocumentFragment();
-                    while (wrapper.firstChild) {
-                        fragment.appendChild(wrapper.firstChild);
-                    }
+                        const fragment = document.createDocumentFragment();
+                        while (wrapper.firstChild) {
+                            fragment.appendChild(wrapper.firstChild);
+                        }
 
-                    el.replaceWith(fragment);
+                        el.replaceWith(fragment);
+                    });
                 });
                 break;
 
