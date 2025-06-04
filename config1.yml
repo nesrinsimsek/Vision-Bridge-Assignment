@@ -3,7 +3,7 @@ actions:
     selector: ".ad-banner"
   - type: replace
     selector: "#old-header"
-    newElement: "<header id='new-header'>Understanding Machine Learning Concepts</header>"
+    newElement: "<h1 id='new-header'>Understanding Machine Learning Concepts</h1>"
   - type: insert
     position: "after"
     target: "body"
