@@ -10,6 +10,8 @@ async function loadYAMLFiles(urls) {
 }
 
 function applyActions(actions) {
+
+
     actions.forEach(action => {
         switch (action.type) {
             case "remove":
@@ -21,34 +23,30 @@ function applyActions(actions) {
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = action.newElement;
 
-                    const parent = el.parentNode;
-                    const children = Array.from(wrapper.childNodes);
+                    const fragment = document.createDocumentFragment();
+                    while (wrapper.firstChild) {
+                        fragment.appendChild(wrapper.firstChild);
+                    }
 
-                    children.forEach(child => {
-                        parent.insertBefore(child, el);
-                    });
-
-                    el.remove();
+                    el.replaceWith(fragment);
                 });
                 break;
 
             case "insert":
                 const target = document.querySelector(action.target);
                 if (!target) return;
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = action.element;
 
-                const temp = document.createElement('div');
-                temp.innerHTML = action.element;
-
-                const children = Array.from(temp.childNodes);
+                const fragment = document.createDocumentFragment();
+                while (wrapper.firstChild) {
+                    fragment.appendChild(wrapper.firstChild);
+                }
 
                 if (action.position === "after") {
-                    children.forEach(child => {
-                        target.appendChild(child);
-                    });
+                    target.appendChild(fragment);
                 } else if (action.position === "before") {
-                    children.reverse().forEach(child => {
-                        target.insertBefore(child, target.firstChild);
-                    });
+                    target.insertBefore(fragment, target.firstChild);
                 }
                 break;
 
