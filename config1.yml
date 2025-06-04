@@ -1,4 +1,4 @@
-priority: 2
+priority: 1
 actions:
   - type: remove
     selector: ".ad-banner"
