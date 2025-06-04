@@ -37,21 +37,25 @@ function applyActions(actions) {
                 break;
 
             case "insert":
-                const target = document.querySelector(action.target);
-                if (!target) return;
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = action.element;
+                const targets = Array.isArray(action.target) ? action.target : [action.target];
+               
+                targets.forEach(target => {
+                    document.querySelectorAll(target).forEach(tar => {
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = action.element;
 
-                const fragment = document.createDocumentFragment();
-                while (wrapper.firstChild) {
-                    fragment.appendChild(wrapper.firstChild);
-                }
+                        const fragment = document.createDocumentFragment();
+                        while (wrapper.firstChild) {
+                            fragment.appendChild(wrapper.firstChild);
+                        }
 
-                if (action.position === "after") {
-                    target.appendChild(fragment);
-                } else if (action.position === "before") {
-                    target.insertBefore(fragment, target.firstChild);
-                }
+                        if (action.position === "after") {
+                            tar.appendChild(fragment);
+                        } else if (action.position === "before") {
+                            tar.insertBefore(fragment, target.firstChild);
+                        }
+                    });
+                });             
                 break;
 
             case "alter":
