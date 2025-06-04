@@ -1,26 +1,31 @@
 async function loadYAMLFiles(urls) {
-    const results = await Promise.all(
+    const configs = await Promise.all(
         urls.map(url =>
             fetch(url)
                 .then(res => res.text())
-                .then(text => jsyaml.load(text))
+                .then(text => {
+                    const config = jsyaml.load(text);
+                    return {
+                        priority: config.priority || 0,
+                        actions: config.actions || []
+                    };
+                })
         )
     );
-    return results.flatMap(config => config.actions || []);
+    return configs;
 }
 
 function applyActions(actions) {
-
-
     actions.forEach(action => {
         switch (action.type) {
+           
             case "remove":
                 document.querySelectorAll(action.selector).forEach(el => el.remove());
                 break;
 
             case "replace":
                 const selectors = Array.isArray(action.selector) ? action.selector : [action.selector];
-               
+
                 selectors.forEach(selector => {
                     document.querySelectorAll(selector).forEach(el => {
                         const wrapper = document.createElement('div');
@@ -38,7 +43,7 @@ function applyActions(actions) {
 
             case "insert":
                 const targets = Array.isArray(action.target) ? action.target : [action.target];
-               
+
                 targets.forEach(target => {
                     document.querySelectorAll(target).forEach(tar => {
                         const wrapper = document.createElement('div');
@@ -55,7 +60,7 @@ function applyActions(actions) {
                             tar.insertBefore(fragment, target.firstChild);
                         }
                     });
-                });             
+                });
                 break;
 
             case "alter":
@@ -69,5 +74,12 @@ function applyActions(actions) {
     });
 }
 
+loadYAMLFiles(['config1.yml', 'config2.yml']).then(results => {
 
-loadYAMLFiles(['config1.yml']).then(applyActions);
+    results.sort((a, b) => b.priority - a.priority);
+
+    const allActions = results.flatMap(item => item.actions);
+
+    applyActions(allActions);
+    
+});

@@ -1,9 +1,10 @@
+priority: 2
 actions:
   - type: remove
     selector: ".ad-banner"
   - type: replace
     selector: "#old-header"
-    newElement: "<h1 id='new-header'>Understanding Machine Learning Concepts</h1>"
+    newElement: "<h2 id='new-header'>Understanding Machine Learning Concepts</h2>"
   - type: insert
     position: "after"
     target: "body"

@@ -1,0 +1,5 @@
+priority: 1
+actions:
+  - type: alter
+    oldValue: "Machine Learning"
+    newValue: "Deep Learning"
